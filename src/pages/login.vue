@@ -3,30 +3,33 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import useAuth from "../composable/useAuth";
 import useError from "../composable/useError";
-
-
-const { isAuthenticated, login } = useAuth();
-const username =ref("")
-const password =ref("")
-
+const { isAuthenticated, login, signup } = useAuth();
+const username = ref("");
+const password = ref("");
 const router = useRouter();
-
 const logginIn = async () => {
   await login(username.value, password.value);
+  goToHome();
+};
+const signingUp = async () => {
+  await signup(username.value, password.value);
+  goToHome();
+};
+const goToHome = () => {
   if (isAuthenticated.value) {
- router.push("/");
+    router.push("/");
   } else {
     setError("Invalid username or password");
     start();
   }
-
 };
 
 const { error, setError } = useError();
 import { useTimeout, promiseTimeout } from "@vueuse/core";
 const { ready, start } = useTimeout(3000, { controls: true });
- 
 </script>
+
+ 
  
  <template>
  <div class="flex flex-col items-center justify-center py-20">
@@ -36,7 +39,11 @@ const { ready, start } = useTimeout(3000, { controls: true });
  <form @submit.prevent="logginIn" class="flex flex-col p-4 space-y-4">
  <input type="text" class=" p-2 border-2 rounded-lg" placeholder="Username" v-model="username" /> 
 <input type="Password" class=" p-2 border-2 rounded-lg" placeholder="Password" v-model="password" /> 
-<button type="submit" @submit.prevent="logginIn" class="py-2 rounded-lg text-indigo-800 bg-teal-500">Login</button>
+<div class="flex space-x-2">
+<button type="submit" @submit.prevent="logginIn" class="w-1/2 py-2 rounded-lg text-purple-800 bg-teal-500">Login</button>
+ 
+<button @click="signingUp"  class="w-1/2 py-2 rounded-lg text-orange-800 bg-blue-500">SignUp</button>
+ </div>
  </form>
  </div>
   <div
