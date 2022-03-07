@@ -54,7 +54,7 @@ const useAuth = () => {
     user.value = "";
   };
 
-  return { isAuthenticated, login, signup, logout, user, googleLogin};
+  return { isAuthenticated, login, signup, logout, user, googleLogin };
 };
 
 export default useAuth;
